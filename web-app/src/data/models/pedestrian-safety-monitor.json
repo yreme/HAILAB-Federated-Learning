@@ -177,26 +177,49 @@
   },
   "inference": {
     "defaultModelVersion": "B7 v2.0.0",
+    "defaultServiceId": "pedestrian-roboflow-microservice",
+    "services": [
+      {
+        "id": "pedestrian-roboflow-microservice",
+        "name": "Roboflow Serverless API",
+        "type": "roboflow",
+        "runtime": "microservice",
+        "endpoint": "https://serverless.roboflow.com/port-8oex3/2",
+        "version": "2",
+        "docUrl": "https://docs.roboflow.com/developer/rest-api/using-the-rest-api",
+        "imageParam": "image",
+        "options": {
+          "confidence": 0.4,
+          "overlap": 0.5,
+          "format": "json"
+        },
+        "description": "调用 Port-8OEX3 Roboflow 线上推理微服务"
+      }
+    ],
     "samples": [
       {
         "id": "pedestrian-sample-01",
         "name": "行人闯入吊区",
-        "type": "video",
-        "thumbnail": "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=60",
-        "description": "自动触发红灯",
-        "detections": 15,
+        "type": "image",
+        "thumbnail": "https://source.roboflow.com/Nb3cAVrWvO3Vh1NjucCS/11cCO2zZqQ6ICUcWfR1Q/thumb.jpg",
+        "mediaUrl": "https://source.roboflow.com/Nb3cAVrWvO3Vh1NjucCS/11cCO2zZqQ6ICUcWfR1Q/original.jpg",
+        "description": "自动触发红灯示例画面",
+        "detections": 12,
         "confidence": 0.94,
-        "latency": 68
+        "latency": 68,
+        "inputHint": "Roboflow Universe 监控图像"
       },
       {
         "id": "pedestrian-sample-02",
         "name": "叉车与行人混行",
         "type": "image",
-        "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=60",
-        "description": "堆场交叉口",
+        "thumbnail": "https://source.roboflow.com/Nb3cAVrWvO3Vh1NjucCS/BsJFrA2HizyFmv9UYXk3/thumb.jpg",
+        "mediaUrl": "https://source.roboflow.com/Nb3cAVrWvO3Vh1NjucCS/BsJFrA2HizyFmv9UYXk3/original.jpg",
+        "description": "堆场交叉口冲突风险",
         "detections": 18,
         "confidence": 0.92,
-        "latency": 66
+        "latency": 66,
+        "inputHint": "Roboflow Universe 监控图像"
       }
     ]
   },

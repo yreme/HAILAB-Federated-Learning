@@ -76,6 +76,39 @@ export interface ModelSummary {
     };
 }
 
+export type InferenceRuntime = "microservice" | "edge";
+export type InferenceServiceType = "roboflow" | "web-onnx";
+
+export interface BaseInferenceServiceConfig {
+    id: string;
+    name: string;
+    type: InferenceServiceType;
+    runtime: InferenceRuntime;
+    description?: string;
+}
+
+export interface RoboflowInferenceConfig extends BaseInferenceServiceConfig {
+    type: "roboflow";
+    runtime: "microservice";
+    endpoint: string;
+    version: string;
+    docUrl?: string;
+    imageParam?: string;
+    options?: {
+        confidence?: number;
+        overlap?: number;
+        format?: string;
+    };
+}
+
+export interface WebOnnxInferenceConfig extends BaseInferenceServiceConfig {
+    type: "web-onnx";
+    runtime: "edge";
+    modelUrl?: string;
+}
+
+export type InferenceServiceConfig = RoboflowInferenceConfig | WebOnnxInferenceConfig;
+
 export interface ModelInferenceSample {
     id: string;
     name: string;
@@ -85,10 +118,50 @@ export interface ModelInferenceSample {
     detections: number;
     confidence: number;
     latency: number;
+    mediaUrl?: string;
+    inputHint?: string;
+}
+
+export interface InferenceBoundingBox {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+export interface InferencePoint {
+    x: number;
+    y: number;
+}
+
+export type InferencePredictionType = "box" | "segment";
+
+export interface InferencePrediction {
+    id: string;
+    label: string;
+    confidence: number;
+    type: InferencePredictionType;
+    color: string;
+    box?: InferenceBoundingBox;
+    points?: InferencePoint[];
+}
+
+export interface NormalizedInferenceResult {
+    provider: string;
+    runtime: InferenceRuntime;
+    durationMs?: number;
+    image: {
+        width: number;
+        height: number;
+    };
+    predictions: InferencePrediction[];
+    raw?: unknown;
 }
 
 export interface ModelInferenceData {
     defaultModelVersion: string;
+    defaultServiceId?: string;
+    services?: InferenceServiceConfig[];
     samples: ModelInferenceSample[];
 }
 
@@ -149,4 +222,10 @@ export interface ModelDetail extends ModelSummary {
     };
     inference: ModelInferenceData;
     tasks: ModelTaskBoard;
+}
+
+declare global {
+    interface Window {
+        Robo_API_KEY?: string;
+    }
 }
