@@ -16,7 +16,7 @@
     "localRecall": 0.73,
     "federatedRecall": 0.87,
     "nodes": ["盐田港", "北部湾港", "厦门港"],
-    "dataset": "司机视角摄像头 + Roboflow 辅助数据",
+    "dataset": "司机视角摄像头 + 增强数据",
     "health": "稳定"
   },
   "overview": {

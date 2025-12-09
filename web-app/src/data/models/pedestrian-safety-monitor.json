@@ -16,7 +16,7 @@
     "localRecall": 0.77,
     "federatedRecall": 0.9,
     "nodes": ["洋山港", "盐田港", "上海外高桥"],
-    "dataset": "港区行人车辆数据集 + Roboflow",
+    "dataset": "港区行人车辆数据集 + 视觉增广",
     "health": "高优先级"
   },
   "overview": {
@@ -181,7 +181,7 @@
     "services": [
       {
         "id": "pedestrian-roboflow-microservice",
-        "name": "Roboflow Serverless API",
+        "name": "港区危险感知微服务",
         "type": "roboflow",
         "runtime": "microservice",
         "endpoint": "https://serverless.roboflow.com/port-8oex3/2",
@@ -193,7 +193,7 @@
           "overlap": 0.5,
           "format": "json"
         },
-        "description": "调用 Port-8OEX3 Roboflow 线上推理微服务"
+        "description": "调用 Port-8OEX3 线上推理微服务"
       }
     ],
     "samples": [
@@ -207,7 +207,7 @@
         "detections": 12,
         "confidence": 0.94,
         "latency": 68,
-        "inputHint": "Roboflow Universe 监控图像"
+        "inputHint": "港区监控样例图像"
       },
       {
         "id": "pedestrian-sample-02",
@@ -219,7 +219,7 @@
         "detections": 18,
         "confidence": 0.92,
         "latency": 66,
-        "inputHint": "Roboflow Universe 监控图像"
+        "inputHint": "港区监控样例图像"
       }
     ]
   },

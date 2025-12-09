@@ -16,7 +16,7 @@
     "localRecall": 0.74,
     "federatedRecall": 0.89,
     "nodes": ["洋山港", "盐田港", "宁波港", "青岛港"],
-    "dataset": "Roboflow Container Vision + 自建 2025Q4",
+    "dataset": "集装箱视觉基座 + 自建 2025Q4",
     "health": "稳定运行"
   },
   "overview": {
@@ -245,7 +245,7 @@
         "id": "FL-FND-2024-18",
         "name": "v2.2.0 验证",
         "mergedPorts": ["洋山港", "盐田港", "宁波港"],
-        "dataset": "Roboflow Container Benchmark",
+        "dataset": "集装箱视觉评测集",
         "metricsDelta": 0.12,
         "evaluated": true
       }

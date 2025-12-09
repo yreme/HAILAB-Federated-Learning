@@ -121,11 +121,11 @@ const runRoboflowInference = async ({ service, imageUrl, apiKey, signal }: RunIn
 
     if (!response.ok) {
         const message = await response.text().catch(() => response.statusText);
-        throw new Error(`Roboflow 推理失败: ${response.status} ${message}`);
+        throw new Error(`远程推理请求失败: ${response.status} ${message}`);
     }
 
     const payload = await response.json().catch(() => {
-        throw new Error("Roboflow 返回的不是合法 JSON");
+        throw new Error("远程推理返回的不是合法 JSON");
     });
 
     return normalizeRoboflow(payload, service, finished - started);

@@ -199,7 +199,7 @@ function ServiceCard({ service }: { service: InferenceServiceConfig }) {
                     </a>
                 )}
             </div>
-            <p className="mt-1 text-xs text-purple-800">运行模式：{service.runtime === "microservice" ? "微服务 (Roboflow)" : "浏览器 ONNX"}</p>
+            <p className="mt-1 text-xs text-purple-800">运行模式：{service.runtime === "microservice" ? "远程推理微服务" : "浏览器 ONNX"}</p>
             {service.description && <p className="mt-2 text-xs leading-5 text-purple-900">{service.description}</p>}
             {service.type === "roboflow" && (
                 <div className="mt-3 rounded-lg bg-white/80 p-3 text-xs text-gray-600">
@@ -290,7 +290,7 @@ function InferenceResultViewer({ imageUrl, result, loading }: { imageUrl: string
             )}
             {loading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white">
-                    正在调用 Roboflow 微服务...
+                    正在调用远程推理服务...
                 </div>
             )}
             {!result && !loading && (
