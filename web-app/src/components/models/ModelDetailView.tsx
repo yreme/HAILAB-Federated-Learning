@@ -7,6 +7,7 @@ import { LossChart } from "../charts/LossChart";
 import { MapChart } from "../charts/MapChart";
 import { ModelTimeline } from "./ModelTimeline";
 import type { ModelVersion } from "../../types";
+import { InferencePlayground } from "./ModelInferencePanel";
 
 const tabs = [
     { key: "overview", label: "模型概览" },
@@ -34,8 +35,6 @@ export function ModelDetailView({ model, peers, onBack, onSelectPeer }: ModelDet
     const [activeTab, setActiveTab] = useState<TabKey>("overview");
     const [activeVersion, setActiveVersion] = useState<"federated" | "local">("federated");
     const [tasks, setTasks] = useState<ModelTaskBoard>(model.tasks);
-    const [selectedSampleId, setSelectedSampleId] = useState(model.inference.samples[0]?.id);
-    const [selectedModelVersion, setSelectedModelVersion] = useState(model.inference.defaultModelVersion);
     const [newTaskName, setNewTaskName] = useState(`${model.name} 联邦增益`);
     const [newPriority, setNewPriority] = useState<QueuedTask["priority"]>("normal");
     const [newRounds, setNewRounds] = useState(80);
@@ -45,15 +44,11 @@ export function ModelDetailView({ model, peers, onBack, onSelectPeer }: ModelDet
         setActiveTab("overview");
         setActiveVersion("federated");
         setTasks(model.tasks);
-        setSelectedSampleId(model.inference.samples[0]?.id);
-        setSelectedModelVersion(model.inference.defaultModelVersion);
         setNewTaskName(`${model.name} 联邦增益`);
         setNewPriority("normal");
         setNewRounds(80);
         setSelectedRunId(model.tasks.completed[0]?.id ?? null);
     }, [model]);
-
-    const selectedSample = useMemo(() => model.inference.samples.find((sample) => sample.id === selectedSampleId), [model, selectedSampleId]);
 
     const versionList: ModelVersion[] = useMemo(() => [...model.versions.federated, ...model.versions.local], [model.versions]);
 
@@ -300,70 +295,7 @@ export function ModelDetailView({ model, peers, onBack, onSelectPeer }: ModelDet
                 </div>
             )}
 
-            {activeTab === "inference" && selectedSample && (
-                <div className="grid gap-6 lg:grid-cols-3">
-                    <div className="space-y-4 rounded-lg bg-white p-6 shadow-md">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">测试样本</h3>
-                        {model.inference.samples.map((sample) => (
-                            <button
-                                key={sample.id}
-                                onClick={() => setSelectedSampleId(sample.id)}
-                                className={`flex w-full items-center space-x-3 rounded-lg border p-3 text-left text-sm ${
-                                    sample.id === selectedSampleId ? "border-purple-500 bg-purple-50" : "border-gray-200"
-                                }`}
-                            >
-                                <img src={sample.thumbnail} alt={sample.name} className="h-12 w-16 rounded object-cover" />
-                                <div>
-                                    <div className="font-semibold text-gray-800">{sample.name}</div>
-                                    <div className="text-xs text-gray-500">{sample.description}</div>
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                    <div className="rounded-lg bg-white p-6 shadow-md lg:col-span-2">
-                        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                            <div>
-                                <div className="text-sm text-gray-500">选择模型版本</div>
-                                <select
-                                    className="mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
-                                    value={selectedModelVersion}
-                                    onChange={(e) => setSelectedModelVersion(e.target.value)}
-                                >
-                                    {versionList.map((version) => (
-                                        <option key={version.id} value={version.version}>
-                                            {version.label} {version.version}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <button className="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">
-                                上传自定义样本
-                            </button>
-                        </div>
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="rounded-lg bg-gray-100 p-6 text-center text-gray-500 h-64 flex flex-col items-center justify-center">
-                                <FaServer className="text-4xl mb-3" />
-                                <p>示例媒体：{selectedSample.type === "video" ? "视频" : "图像"}</p>
-                                <p className="text-xs mt-2">{selectedSample.description}</p>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="rounded-lg bg-blue-50 p-4">
-                                    <div className="text-xs text-gray-500">检测到对象</div>
-                                    <div className="text-2xl font-bold text-blue-600">{selectedSample.detections}</div>
-                                </div>
-                                <div className="rounded-lg bg-green-50 p-4">
-                                    <div className="text-xs text-gray-500">平均置信度</div>
-                                    <div className="text-2xl font-bold text-green-600">{(selectedSample.confidence * 100).toFixed(1)}%</div>
-                                </div>
-                                <div className="rounded-lg bg-purple-50 p-4">
-                                    <div className="text-xs text-gray-500">推理时间</div>
-                                    <div className="text-2xl font-bold text-purple-600">{selectedSample.latency} ms</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {activeTab === "inference" && <InferencePlayground model={model} versions={versionList} />}
         </div>
     );
 }

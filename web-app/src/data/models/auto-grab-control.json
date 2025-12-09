@@ -16,7 +16,7 @@
     "localRecall": 0.68,
     "federatedRecall": 0.84,
     "nodes": ["洋山港", "南沙港"],
-    "dataset": "Roboflow Crane Control + IoT 反馈",
+    "dataset": "智能抓箱控制数据集 + IoT 反馈",
     "health": "待优化"
   },
   "overview": {
