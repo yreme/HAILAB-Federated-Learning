@@ -65,6 +65,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
     }, [uploadedPreview]);
 
     const isLoading = status === "running";
+    const canRunInference = Boolean(uploadedFile || imageUrl);
     const detectionCount = result?.predictions.length ?? selectedSample?.detections ?? 0;
     const confidenceValue = result?.predictions.length
         ? result.predictions.reduce((sum, pred) => sum + pred.confidence, 0) / result.predictions.length
@@ -203,9 +204,9 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                     <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                     <button
                         onClick={handleRunInference}
-                        disabled={isLoading || !imageUrl}
+                        disabled={isLoading || !canRunInference}
                         className={`inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-white ${
-                            isLoading || !imageUrl ? "bg-gray-400" : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95"
+                            isLoading || !canRunInference ? "bg-gray-400" : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95"
                         }`}
                     >
                         <FaPlay className="mr-2" /> {isLoading ? "推理中..." : "开始推理"}
@@ -222,7 +223,9 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                             清除自定义图片
                         </button>
                     )}
-                    {result && (
+                    {isLoading && <span className="text-xs text-purple-600">推理中，请稍候...</span>}
+                    {!isLoading && !canRunInference && <span className="text-xs text-gray-400">先选择示例或上传图片</span>}
+                    {result && !isLoading && (
                         <span className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
                             {`共 ${result.predictions.length} 个结果`}
                         </span>
