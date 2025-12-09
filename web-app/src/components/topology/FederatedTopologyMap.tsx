@@ -13,7 +13,7 @@ const edgeColors: Record<typeof topologyEdges[number]["status"], string> = {
 
 const nodeStatusStyles: Record<NodeStatus, { label: string; dot: string; badge: string }> = {
     active: { label: "在线", dot: "bg-emerald-400", badge: "bg-emerald-500/20 text-emerald-200" },
-    degraded: { label: "降级", dot: "bg-amber-400", badge: "bg-amber-500/20 text-amber-200" },
+    degraded: { label: "网络异常", dot: "bg-orange-400", badge: "bg-orange-500/20 text-orange-200" },
     offline: { label: "离线", dot: "bg-rose-400", badge: "bg-rose-500/20 text-rose-200" },
 };
 
@@ -234,7 +234,7 @@ export function FederatedTopologyMap() {
                         </div>
                         <div className="rounded-xl bg-slate-900/60 p-3">
                             <dt className="text-xs text-slate-400">带宽</dt>
-                            <dd className="text-lg font-semibold text-white">{selectedNode.bandwidthGbps} Gbps</dd>
+                            <dd className="text-lg font-semibold text-white">{selectedNode.bandwidthMbps} Mbps</dd>
                         </div>
                         <div className="rounded-xl bg-slate-900/60 p-3">
                             <dt className="text-xs text-slate-400">最近同步</dt>

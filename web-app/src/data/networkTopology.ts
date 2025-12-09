@@ -8,7 +8,7 @@ export type TopologyNode = {
     location: { lat: number; lng: number };
     status: NodeStatus;
     latencyMs: number;
-    bandwidthGbps: number;
+    bandwidthMbps: number;
     lastSync: string;
     tasks: string[];
     models: string[];
@@ -29,7 +29,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 24.4798, lng: 118.0894 },
         status: "active",
         latencyMs: 42,
-        bandwidthGbps: 40,
+        bandwidthMbps: 950,
         lastSync: "15 秒前",
         tasks: ["港区垂类联邦-42轮", "多模态安全调度"],
         models: ["港口垂类大模型", "抓放箱行人危险检测模型"],
@@ -42,7 +42,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 24.4409, lng: 118.1025 },
         status: "active",
         latencyMs: 55,
-        bandwidthGbps: 20,
+        bandwidthMbps: 620,
         lastSync: "1 分钟前",
         tasks: ["差分隐私实验", "模型蒸馏评测"],
         models: ["视觉辅助抓箱模型"],
@@ -55,7 +55,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 31.2304, lng: 121.4737 },
         status: "active",
         latencyMs: 76,
-        bandwidthGbps: 18,
+        bandwidthMbps: 520,
         lastSync: "28 秒前",
         tasks: ["夜班超分辨", "危险等级自更新"],
         models: ["抓放箱行人危险检测模型", "自动抓箱控制模型"],
@@ -68,7 +68,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 29.8683, lng: 121.5440 },
         status: "active",
         latencyMs: 83,
-        bandwidthGbps: 15,
+        bandwidthMbps: 480,
         lastSync: "45 秒前",
         tasks: ["堆场虚拟仿真"],
         models: ["港口垂类大模型"],
@@ -81,7 +81,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 36.0671, lng: 120.3826 },
         status: "degraded",
         latencyMs: 118,
-        bandwidthGbps: 8,
+        bandwidthMbps: 210,
         lastSync: "3 分钟前",
         tasks: ["雾霾特化"],
         models: ["港口垂类大模型"],
@@ -94,7 +94,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 39.0833, lng: 117.2000 },
         status: "degraded",
         latencyMs: 132,
-        bandwidthGbps: 6,
+        bandwidthMbps: 160,
         lastSync: "5 分钟前",
         tasks: ["光纤维护"],
         models: ["辅助抓箱模型"],
@@ -107,7 +107,7 @@ export const topologyNodes: TopologyNode[] = [
         location: { lat: 22.5431, lng: 114.0579 },
         status: "active",
         latencyMs: 65,
-        bandwidthGbps: 14,
+        bandwidthMbps: 430,
         lastSync: "20 秒前",
         tasks: ["危险等级自更新"],
         models: ["抓放箱行人危险检测模型"],
