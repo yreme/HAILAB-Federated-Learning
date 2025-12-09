@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { FaExternalLinkAlt, FaInfoCircle, FaPlay, FaServer } from "react-icons/fa";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { FaExternalLinkAlt, FaInfoCircle, FaPlay } from "react-icons/fa";
 import type { ModelDetail, ModelVersion, ModelInferenceSample, InferenceServiceConfig, NormalizedInferenceResult } from "../../types";
 import { inferenceService } from "../../services/inferenceService";
 
@@ -10,10 +10,13 @@ interface ModelInferencePanelProps {
 
 export function InferencePlayground({ model, versions }: ModelInferencePanelProps) {
     const services = model.inference.services ?? [];
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedServiceId, setSelectedServiceId] = useState(model.inference.defaultServiceId ?? services[0]?.id ?? "");
     const [selectedSampleId, setSelectedSampleId] = useState(model.inference.samples[0]?.id ?? "");
     const [selectedVersion, setSelectedVersion] = useState(model.inference.defaultModelVersion);
     const [imageUrl, setImageUrl] = useState(model.inference.samples[0]?.mediaUrl ?? model.inference.samples[0]?.thumbnail ?? "");
+    const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
+    const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
     const [result, setResult] = useState<NormalizedInferenceResult | null>(null);
     const [status, setStatus] = useState<"idle" | "running">("idle");
     const [error, setError] = useState<string | null>(null);
@@ -26,16 +29,21 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
         setSelectedVersion(model.inference.defaultModelVersion);
         const defaultSample = model.inference.samples.find((sample) => sample.id === defaultSampleId);
         setImageUrl(defaultSample?.mediaUrl ?? defaultSample?.thumbnail ?? "");
+        setUploadedPreview(null);
+        setUploadedFileName(null);
         setResult(null);
         setError(null);
     }, [model.id]);
 
     const selectedSample = useMemo(() => model.inference.samples.find((sample) => sample.id === selectedSampleId), [model, selectedSampleId]);
     const selectedService = useMemo(() => services.find((service) => service.id === selectedServiceId), [services, selectedServiceId]);
+    const displayImageSrc = uploadedPreview ?? imageUrl ?? selectedSample?.mediaUrl ?? selectedSample?.thumbnail ?? "";
 
     useEffect(() => {
         if (!selectedSample) return;
         setImageUrl(selectedSample.mediaUrl ?? selectedSample.thumbnail ?? "");
+        setUploadedPreview(null);
+        setUploadedFileName(null);
         setResult(null);
         setError(null);
     }, [selectedSampleId]);
@@ -45,12 +53,28 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
         setError(null);
     }, [selectedServiceId]);
 
+    useEffect(() => {
+        return () => {
+            if (uploadedPreview) {
+                URL.revokeObjectURL(uploadedPreview);
+            }
+        };
+    }, [uploadedPreview]);
+
     const isLoading = status === "running";
     const detectionCount = result?.predictions.length ?? selectedSample?.detections ?? 0;
     const confidenceValue = result?.predictions.length
         ? result.predictions.reduce((sum, pred) => sum + pred.confidence, 0) / result.predictions.length
         : selectedSample?.confidence ?? 0;
     const latencyValue = result?.durationMs ?? selectedSample?.latency ?? 0;
+
+    const readFileAsDataUrl = (file: File) =>
+        new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
 
     const handleRunInference = async () => {
         if (!selectedService) {
@@ -69,6 +93,42 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
             setError(err instanceof Error ? err.message : "推理失败");
         } finally {
             setStatus("idle");
+        }
+    };
+
+    const handleUploadClick = () => fileInputRef.current?.click();
+
+    const handleClearUpload = () => {
+        if (uploadedPreview) {
+            URL.revokeObjectURL(uploadedPreview);
+        }
+        setUploadedPreview(null);
+        setUploadedFileName(null);
+        if (selectedSample) {
+            setImageUrl(selectedSample.mediaUrl ?? selectedSample.thumbnail ?? "");
+        }
+        setResult(null);
+        setError(null);
+    };
+
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        try {
+            const dataUrl = await readFileAsDataUrl(file);
+            if (uploadedPreview) {
+                URL.revokeObjectURL(uploadedPreview);
+            }
+            const objectUrl = URL.createObjectURL(file);
+            setUploadedPreview(objectUrl);
+            setUploadedFileName(file.name);
+            setImageUrl(dataUrl);
+            setResult(null);
+            setError(null);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "读取图片失败");
+        } finally {
+            event.target.value = "";
         }
     };
 
@@ -134,6 +194,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                     {selectedSample?.inputHint && <p className="mt-1 text-xs text-gray-400">{selectedSample.inputHint}</p>}
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
+                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                     <button
                         onClick={handleRunInference}
                         disabled={isLoading || !imageUrl}
@@ -143,6 +204,18 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                     >
                         <FaPlay className="mr-2" /> {isLoading ? "推理中..." : "开始推理"}
                     </button>
+                    <button
+                        type="button"
+                        onClick={handleUploadClick}
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                    >
+                        上传本地图片
+                    </button>
+                    {uploadedPreview && (
+                        <button type="button" onClick={handleClearUpload} className="text-xs text-purple-600 underline">
+                            清除自定义图片
+                        </button>
+                    )}
                     {result && (
                         <span className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
                             {`共 ${result.predictions.length} 个结果`}
@@ -150,8 +223,9 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                     )}
                     {error && <span className="text-xs text-red-500">{error}</span>}
                 </div>
+                {uploadedFileName && <p className="text-xs text-green-600">已选择：{uploadedFileName}</p>}
                 <MetricsRow detections={detectionCount} confidence={confidenceValue} latency={latencyValue} />
-                <InferenceResultViewer imageUrl={imageUrl} result={result} loading={isLoading} />
+                <InferenceResultViewer imageSrc={displayImageSrc || imageUrl} result={result} loading={isLoading} />
                 <PredictionList result={result} />
             </div>
         </div>
@@ -201,14 +275,6 @@ function ServiceCard({ service }: { service: InferenceServiceConfig }) {
             </div>
             <p className="mt-1 text-xs text-purple-800">运行模式：{service.runtime === "microservice" ? "远程推理微服务" : "浏览器 ONNX"}</p>
             {service.description && <p className="mt-2 text-xs leading-5 text-purple-900">{service.description}</p>}
-            {service.type === "roboflow" && (
-                <div className="mt-3 rounded-lg bg-white/80 p-3 text-xs text-gray-600">
-                    <div className="flex items-center text-gray-700">
-                        <FaServer className="mr-2" /> Endpoint
-                    </div>
-                    <div className="mt-1 break-all font-mono text-[11px] text-gray-500">{service.endpoint}</div>
-                </div>
-            )}
         </div>
     );
 }
@@ -232,16 +298,12 @@ function MetricsRow({ detections, confidence, latency }: { detections: number; c
     );
 }
 
-function InferenceResultViewer({ imageUrl, result, loading }: { imageUrl: string; result: NormalizedInferenceResult | null; loading: boolean }) {
+function InferenceResultViewer({ imageSrc, result, loading }: { imageSrc: string; result: NormalizedInferenceResult | null; loading: boolean }) {
     const width = result?.image.width ?? 1920;
     const height = result?.image.height ?? 1080;
     return (
         <div className="relative overflow-hidden rounded-xl border border-gray-200 bg-black/90">
-            <img
-                src={imageUrl}
-                alt="推理样本"
-                className="w-full object-contain"
-            />
+            <img src={imageSrc} alt="推理样本" className="w-full object-contain" />
             {result && (
                 <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
                     {result.predictions.map((pred) => {
