@@ -12,7 +12,8 @@ const labelColorCache = new Map<string, string>();
 
 interface RunInferenceParams {
     service: InferenceServiceConfig;
-    imageUrl: string;
+    imageUrl?: string;
+    file?: File | null;
     apiKey?: string | null;
     signal?: AbortSignal;
 }
@@ -97,26 +98,36 @@ const normalizeRoboflow = (
     } satisfies NormalizedInferenceResult;
 };
 
-const runRoboflowInference = async ({ service, imageUrl, apiKey, signal }: RunInferenceParams & { service: RoboflowInferenceConfig }) => {
+const runRoboflowInference = async ({ service, imageUrl, file, apiKey, signal }: RunInferenceParams & { service: RoboflowInferenceConfig }) => {
     const effectiveApiKey = apiKey ?? getRoboflowApiKey();
     if (!effectiveApiKey) {
         throw new Error("未检测到 Robo_API_KEY，请在 index.html 或 Vite 环境变量中配置。");
     }
-    if (!imageUrl) {
-        throw new Error("请提供用于推理的图像地址");
-    }
 
     const requestUrl = new URL(service.endpoint);
     requestUrl.searchParams.set("api_key", effectiveApiKey);
-    requestUrl.searchParams.set(service.imageParam ?? "image", imageUrl);
+
     const optionEntries = Object.entries(service.options ?? {}).filter(([, value]) => value !== undefined);
     optionEntries.forEach(([key, value]) => requestUrl.searchParams.set(key, String(value)));
 
-    const started = typeof performance !== "undefined" ? performance.now() : Date.now();
-    const response = await fetch(requestUrl.toString(), {
+    const init: RequestInit = {
         method: "POST",
         signal,
-    });
+    };
+
+    if (file) {
+        const form = new FormData();
+        form.append("file", file);
+        init.body = form;
+    } else {
+        if (!imageUrl) {
+            throw new Error("请选择测试样本或上传图片");
+        }
+        requestUrl.searchParams.set(service.imageParam ?? "image", imageUrl);
+    }
+
+    const started = typeof performance !== "undefined" ? performance.now() : Date.now();
+    const response = await fetch(requestUrl.toString(), init);
     const finished = typeof performance !== "undefined" ? performance.now() : Date.now();
 
     if (!response.ok) {

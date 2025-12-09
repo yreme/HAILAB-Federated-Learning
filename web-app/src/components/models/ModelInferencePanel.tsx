@@ -16,6 +16,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
     const [selectedVersion, setSelectedVersion] = useState(model.inference.defaultModelVersion);
     const [imageUrl, setImageUrl] = useState(model.inference.samples[0]?.mediaUrl ?? model.inference.samples[0]?.thumbnail ?? "");
     const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
     const [result, setResult] = useState<NormalizedInferenceResult | null>(null);
     const [status, setStatus] = useState<"idle" | "running">("idle");
@@ -30,6 +31,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
         const defaultSample = model.inference.samples.find((sample) => sample.id === defaultSampleId);
         setImageUrl(defaultSample?.mediaUrl ?? defaultSample?.thumbnail ?? "");
         setUploadedPreview(null);
+        setUploadedFile(null);
         setUploadedFileName(null);
         setResult(null);
         setError(null);
@@ -43,6 +45,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
         if (!selectedSample) return;
         setImageUrl(selectedSample.mediaUrl ?? selectedSample.thumbnail ?? "");
         setUploadedPreview(null);
+        setUploadedFile(null);
         setUploadedFileName(null);
         setResult(null);
         setError(null);
@@ -68,17 +71,13 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
         : selectedSample?.confidence ?? 0;
     const latencyValue = result?.durationMs ?? selectedSample?.latency ?? 0;
 
-    const readFileAsDataUrl = (file: File) =>
-        new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-
     const handleRunInference = async () => {
         if (!selectedService) {
             setError("当前模型未配置推理微服务");
+            return;
+        }
+        if (!uploadedFile && !imageUrl) {
+            setError("请选择测试样本或上传图片");
             return;
         }
         try {
@@ -87,6 +86,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
             const newResult = await inferenceService.run({
                 service: selectedService,
                 imageUrl,
+                file: uploadedFile ?? undefined,
             });
             setResult(newResult);
         } catch (err) {
@@ -103,6 +103,7 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
             URL.revokeObjectURL(uploadedPreview);
         }
         setUploadedPreview(null);
+        setUploadedFile(null);
         setUploadedFileName(null);
         if (selectedSample) {
             setImageUrl(selectedSample.mediaUrl ?? selectedSample.thumbnail ?? "");
@@ -114,22 +115,17 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
     const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
-        try {
-            const dataUrl = await readFileAsDataUrl(file);
-            if (uploadedPreview) {
-                URL.revokeObjectURL(uploadedPreview);
-            }
-            const objectUrl = URL.createObjectURL(file);
-            setUploadedPreview(objectUrl);
-            setUploadedFileName(file.name);
-            setImageUrl(dataUrl);
-            setResult(null);
-            setError(null);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "读取图片失败");
-        } finally {
-            event.target.value = "";
+        if (uploadedPreview) {
+            URL.revokeObjectURL(uploadedPreview);
         }
+        const objectUrl = URL.createObjectURL(file);
+        setUploadedPreview(objectUrl);
+        setUploadedFile(file);
+        setUploadedFileName(file.name);
+        setImageUrl("");
+        setResult(null);
+        setError(null);
+        event.target.value = "";
     };
 
     if (services.length === 0) {
@@ -188,7 +184,17 @@ export function InferencePlayground({ model, versions }: ModelInferencePanelProp
                     <input
                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
                         value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
+                        onChange={(e) => {
+                            if (uploadedPreview) {
+                                URL.revokeObjectURL(uploadedPreview);
+                            }
+                            setUploadedPreview(null);
+                            setUploadedFile(null);
+                            setUploadedFileName(null);
+                            setImageUrl(e.target.value);
+                            setResult(null);
+                            setError(null);
+                        }}
                         placeholder="https://..."
                     />
                     {selectedSample?.inputHint && <p className="mt-1 text-xs text-gray-400">{selectedSample.inputHint}</p>}
