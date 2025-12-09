@@ -1,0 +1,232 @@
+{
+  "id": "anti-sway-protection",
+  "name": "抓箱防吊起模型",
+  "category": "安全防护",
+  "description": "监测抓箱过程中的异常吊起、集装箱偏斜，提前触发制动或报警。",
+  "thumbnail": "https://demo-site-1251266818.cos.ap-beijing.myqcloud.com/emery-forever-demo/emery/2025/12/port-img/anti-sway-protection.jpg",
+  "tags": ["防吊起", "异常检测", "安全"],
+  "status": "alert",
+  "summary": {
+    "localVersion": "C6 v0.7.2",
+    "federatedVersion": "B6 v1.2.0",
+    "localMap": 0.69,
+    "federatedMap": 0.85,
+    "localPrecision": 0.73,
+    "federatedPrecision": 0.88,
+    "localRecall": 0.65,
+    "federatedRecall": 0.82,
+    "nodes": ["洋山港", "大连港", "马鞍山港"],
+    "dataset": "吊具姿态+钢丝绳传感",
+    "health": "关注吊具#5"
+  },
+  "overview": {
+    "datasetStats": [
+      { "value": "3", "description": "监测节点" },
+      { "value": "6,200", "description": "异常样本" },
+      { "value": "34ms", "description": "报警延迟" },
+      { "value": "98%", "description": "误检抑制" }
+    ]
+  },
+  "performance": {
+    "metrics": [
+      { "label": "mAP@50", "localValue": 0.69, "fedValue": 0.85 },
+      { "label": "Precision", "localValue": 0.73, "fedValue": 0.88 },
+      { "label": "Recall", "localValue": 0.65, "fedValue": 0.82 }
+    ],
+    "lossSeries": [
+      {
+        "epoch": 1,
+        "localLoss": 1.02,
+        "fedLoss": 0.84,
+        "localMap": 0.28,
+        "fedMap": 0.42
+      },
+      {
+        "epoch": 2,
+        "localLoss": 0.94,
+        "fedLoss": 0.76,
+        "localMap": 0.34,
+        "fedMap": 0.48
+      },
+      {
+        "epoch": 3,
+        "localLoss": 0.86,
+        "fedLoss": 0.68,
+        "localMap": 0.4,
+        "fedMap": 0.55
+      },
+      {
+        "epoch": 4,
+        "localLoss": 0.78,
+        "fedLoss": 0.6,
+        "localMap": 0.47,
+        "fedMap": 0.62
+      },
+      {
+        "epoch": 5,
+        "localLoss": 0.7,
+        "fedLoss": 0.52,
+        "localMap": 0.53,
+        "fedMap": 0.68
+      },
+      {
+        "epoch": 6,
+        "localLoss": 0.64,
+        "fedLoss": 0.46,
+        "localMap": 0.58,
+        "fedMap": 0.73
+      },
+      {
+        "epoch": 7,
+        "localLoss": 0.58,
+        "fedLoss": 0.4,
+        "localMap": 0.63,
+        "fedMap": 0.77
+      },
+      {
+        "epoch": 8,
+        "localLoss": 0.52,
+        "fedLoss": 0.35,
+        "localMap": 0.67,
+        "fedMap": 0.81
+      },
+      {
+        "epoch": 9,
+        "localLoss": 0.48,
+        "fedLoss": 0.31,
+        "localMap": 0.69,
+        "fedMap": 0.83
+      },
+      {
+        "epoch": 10,
+        "localLoss": 0.44,
+        "fedLoss": 0.28,
+        "localMap": 0.7,
+        "fedMap": 0.84
+      },
+      {
+        "epoch": 11,
+        "localLoss": 0.42,
+        "fedLoss": 0.26,
+        "localMap": 0.69,
+        "fedMap": 0.85
+      },
+      {
+        "epoch": 12,
+        "localLoss": 0.4,
+        "fedLoss": 0.24,
+        "localMap": 0.69,
+        "fedMap": 0.85
+      }
+    ],
+    "mapSeries": [
+      { "epoch": 1, "localMap": 0.28, "fedMap": 0.42 },
+      { "epoch": 2, "localMap": 0.34, "fedMap": 0.48 },
+      { "epoch": 3, "localMap": 0.4, "fedMap": 0.55 },
+      { "epoch": 4, "localMap": 0.47, "fedMap": 0.62 },
+      { "epoch": 5, "localMap": 0.53, "fedMap": 0.68 },
+      { "epoch": 6, "localMap": 0.58, "fedMap": 0.73 },
+      { "epoch": 7, "localMap": 0.63, "fedMap": 0.77 },
+      { "epoch": 8, "localMap": 0.67, "fedMap": 0.81 },
+      { "epoch": 9, "localMap": 0.69, "fedMap": 0.83 },
+      { "epoch": 10, "localMap": 0.7, "fedMap": 0.84 },
+      { "epoch": 11, "localMap": 0.69, "fedMap": 0.85 },
+      { "epoch": 12, "localMap": 0.69, "fedMap": 0.85 }
+    ]
+  },
+  "versions": {
+    "local": [
+      {
+        "id": "anti-sway-local-v072",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C6 v0.7.2",
+        "createdAt": "2025-08-30 08:10",
+        "metrics": { "map50": 0.69, "precision": 0.73, "recall": 0.65 },
+        "sizeMB": 126.0,
+        "summary": "吊具#5 钢丝绳传感器",
+        "badges": ["异常检测", "单节点"],
+        "isActive": false
+      }
+    ],
+    "federated": [
+      {
+        "id": "anti-sway-fed-v120",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B6 v1.2.0",
+        "createdAt": "2025-12-04 12:25",
+        "metrics": { "map50": 0.85, "precision": 0.88, "recall": 0.82 },
+        "sizeMB": 127.4,
+        "summary": "融入大连港姿态样本",
+        "badges": ["联邦", "3节点"],
+        "isActive": true
+      }
+    ]
+  },
+  "inference": {
+    "defaultModelVersion": "B6 v1.2.0",
+    "samples": [
+      {
+        "id": "anti-sway-sample-01",
+        "name": "吊具偏斜 8°",
+        "type": "video",
+        "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60",
+        "description": "突发侧风",
+        "detections": 5,
+        "confidence": 0.86,
+        "latency": 42
+      },
+      {
+        "id": "anti-sway-sample-02",
+        "name": "钢丝绳不对称",
+        "type": "image",
+        "thumbnail": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=600&q=60",
+        "description": "拉力异常",
+        "detections": 4,
+        "confidence": 0.88,
+        "latency": 41
+      }
+    ]
+  },
+  "tasks": {
+    "running": [
+      {
+        "id": "FL-ANTI-2025-04",
+        "name": "防吊起异常放大",
+        "currentRound": 15,
+        "totalRounds": 60,
+        "progress": 25,
+        "nodes": ["洋山港", "大连港", "马鞍山港"],
+        "dataset": "异常吊起 2025-Q4",
+        "logs": [
+          "[14:05:33] Round 15 -> global loss 0.37",
+          "[14:05:35] 大连港补充 68 条报警样本",
+          "[14:05:37] 节点马鞍山延迟 210ms，自动重发",
+          "[14:05:40] 触发防抖参数调优",
+          "[14:05:43] 将在 round 18 引入稀疏门控"
+        ]
+      }
+    ],
+    "queued": [
+      {
+        "id": "FL-ANTI-2025-06",
+        "name": "吊具#7 专项",
+        "position": 5,
+        "eta": "2.5 小时",
+        "queueLength": 21,
+        "priority": "normal"
+      }
+    ],
+    "completed": [
+      {
+        "id": "FL-ANTI-2024-12",
+        "name": "防吊起 v1.2",
+        "mergedPorts": ["洋山港", "大连港"],
+        "dataset": "Anti-Sway Benchmark",
+        "metricsDelta": 0.14,
+        "evaluated": false
+      }
+    ]
+  }
+}

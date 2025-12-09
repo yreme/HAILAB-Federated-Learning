@@ -1,0 +1,254 @@
+{
+  "id": "foundation-vision",
+  "name": "港口垂类大模型",
+  "category": "多任务融合",
+  "description": "覆盖堆场调度、危险识别、吊具控制等 12 大子任务的综合视觉+控制模型，主打跨港口知识迁移。",
+  "thumbnail": "https://t7.baidu.com/it/u=1268421974,438921771&fm=193",
+  "tags": ["多模态", "指挥调度", "跨场景"],
+  "status": "stable",
+  "summary": {
+    "localVersion": "C1 v1.2.0",
+    "federatedVersion": "B1 v2.2.1",
+    "localMap": 0.78,
+    "federatedMap": 0.91,
+    "localPrecision": 0.81,
+    "federatedPrecision": 0.93,
+    "localRecall": 0.74,
+    "federatedRecall": 0.89,
+    "nodes": ["洋山港", "盐田港", "宁波港", "青岛港"],
+    "dataset": "Roboflow Container Vision + 自建 2025Q4",
+    "health": "稳定运行"
+  },
+  "overview": {
+    "datasetStats": [
+      { "value": "4", "description": "参与港口节点" },
+      { "value": "18,240", "description": "多模态样本" },
+      { "value": "12", "description": "多任务头" },
+      { "value": "62,300", "description": "标注对象" }
+    ]
+  },
+  "performance": {
+    "metrics": [
+      { "label": "mAP@50", "localValue": 0.78, "fedValue": 0.91 },
+      { "label": "Precision", "localValue": 0.81, "fedValue": 0.93 },
+      { "label": "Recall", "localValue": 0.74, "fedValue": 0.89 }
+    ],
+    "lossSeries": [
+      {
+        "epoch": 1,
+        "localLoss": 0.92,
+        "fedLoss": 0.78,
+        "localMap": 0.42,
+        "fedMap": 0.55
+      },
+      {
+        "epoch": 2,
+        "localLoss": 0.88,
+        "fedLoss": 0.72,
+        "localMap": 0.46,
+        "fedMap": 0.59
+      },
+      {
+        "epoch": 3,
+        "localLoss": 0.82,
+        "fedLoss": 0.66,
+        "localMap": 0.5,
+        "fedMap": 0.63
+      },
+      {
+        "epoch": 4,
+        "localLoss": 0.74,
+        "fedLoss": 0.58,
+        "localMap": 0.55,
+        "fedMap": 0.68
+      },
+      {
+        "epoch": 5,
+        "localLoss": 0.66,
+        "fedLoss": 0.5,
+        "localMap": 0.6,
+        "fedMap": 0.72
+      },
+      {
+        "epoch": 6,
+        "localLoss": 0.58,
+        "fedLoss": 0.42,
+        "localMap": 0.64,
+        "fedMap": 0.76
+      },
+      {
+        "epoch": 7,
+        "localLoss": 0.5,
+        "fedLoss": 0.36,
+        "localMap": 0.68,
+        "fedMap": 0.8
+      },
+      {
+        "epoch": 8,
+        "localLoss": 0.44,
+        "fedLoss": 0.3,
+        "localMap": 0.71,
+        "fedMap": 0.83
+      },
+      {
+        "epoch": 9,
+        "localLoss": 0.4,
+        "fedLoss": 0.26,
+        "localMap": 0.73,
+        "fedMap": 0.85
+      },
+      {
+        "epoch": 10,
+        "localLoss": 0.36,
+        "fedLoss": 0.22,
+        "localMap": 0.75,
+        "fedMap": 0.88
+      },
+      {
+        "epoch": 11,
+        "localLoss": 0.34,
+        "fedLoss": 0.2,
+        "localMap": 0.77,
+        "fedMap": 0.9
+      },
+      {
+        "epoch": 12,
+        "localLoss": 0.32,
+        "fedLoss": 0.18,
+        "localMap": 0.78,
+        "fedMap": 0.91
+      }
+    ],
+    "mapSeries": [
+      { "epoch": 1, "localMap": 0.42, "fedMap": 0.55 },
+      { "epoch": 2, "localMap": 0.46, "fedMap": 0.59 },
+      { "epoch": 3, "localMap": 0.5, "fedMap": 0.63 },
+      { "epoch": 4, "localMap": 0.55, "fedMap": 0.68 },
+      { "epoch": 5, "localMap": 0.6, "fedMap": 0.72 },
+      { "epoch": 6, "localMap": 0.64, "fedMap": 0.76 },
+      { "epoch": 7, "localMap": 0.68, "fedMap": 0.8 },
+      { "epoch": 8, "localMap": 0.71, "fedMap": 0.83 },
+      { "epoch": 9, "localMap": 0.73, "fedMap": 0.85 },
+      { "epoch": 10, "localMap": 0.75, "fedMap": 0.88 },
+      { "epoch": 11, "localMap": 0.77, "fedMap": 0.9 },
+      { "epoch": 12, "localMap": 0.78, "fedMap": 0.91 }
+    ]
+  },
+  "versions": {
+    "local": [
+      {
+        "id": "foundation-local-v120",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C1 v1.2.0",
+        "createdAt": "2025-11-30 14:20",
+        "metrics": { "map50": 0.78, "precision": 0.81, "recall": 0.74 },
+        "sizeMB": 256.3,
+        "summary": "合肥港单点训练，增强堆场调度逻辑",
+        "badges": ["YOLOv8x", "单节点", "FP32"],
+        "isActive": false
+      },
+      {
+        "id": "foundation-local-v110",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C1 v1.1.0",
+        "createdAt": "2025-09-18 09:40",
+        "metrics": { "map50": 0.73, "precision": 0.77, "recall": 0.71 },
+        "sizeMB": 252.1,
+        "summary": "YOLOv8l 变体，偏向行人安全任务",
+        "badges": ["YOLOv8l", "单节点"]
+      }
+    ],
+    "federated": [
+      {
+        "id": "foundation-fed-v221",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B1 v2.2.1",
+        "createdAt": "2025-12-08 15:10",
+        "metrics": { "map50": 0.91, "precision": 0.93, "recall": 0.89 },
+        "sizeMB": 258.7,
+        "summary": "4 港口协同 120 轮，开启安全聚合",
+        "badges": ["联邦", "4节点", "DP-SecAgg"],
+        "isActive": true
+      },
+      {
+        "id": "foundation-fed-v220",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B1 v2.2.0",
+        "createdAt": "2025-11-26 10:05",
+        "metrics": { "map50": 0.89, "precision": 0.91, "recall": 0.86 },
+        "sizeMB": 257.6,
+        "summary": "首个跨港多任务融合版本",
+        "badges": ["联邦", "3节点", "BF16"]
+      }
+    ]
+  },
+  "inference": {
+    "defaultModelVersion": "B1 v2.2.1",
+    "samples": [
+      {
+        "id": "foundation-sample-01",
+        "name": "远景堆场全景",
+        "type": "image",
+        "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=60",
+        "description": "20+ 集装箱同时装卸",
+        "detections": 26,
+        "confidence": 0.92,
+        "latency": 65
+      },
+      {
+        "id": "foundation-sample-02",
+        "name": "夜间桥吊作业",
+        "type": "video",
+        "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60",
+        "description": "红外+可见光融合",
+        "detections": 14,
+        "confidence": 0.88,
+        "latency": 92
+      }
+    ]
+  },
+  "tasks": {
+    "running": [
+      {
+        "id": "FL-FND-2025-01",
+        "name": "港口垂类联邦迭代",
+        "currentRound": 42,
+        "totalRounds": 120,
+        "progress": 35,
+        "nodes": ["洋山港", "盐田港", "宁波港", "青岛港"],
+        "dataset": "港区多模态 2025Q4",
+        "logs": [
+          "[09:31:12] Round 41 聚合完成，平均 loss 0.24",
+          "[09:31:13] 上传 4/4 节点梯度，使用安全聚合",
+          "[09:31:16] 触发精度触发器，追加 5 轮微调",
+          "[09:31:18] Round 42 训练中：洋山港 loss 0.22",
+          "[09:31:21] 即将下发下一轮全局模型"
+        ]
+      }
+    ],
+    "queued": [
+      {
+        "id": "FL-FND-2025-03",
+        "name": "港口垂类-冬季雾霾特化",
+        "position": 3,
+        "eta": "1 小时",
+        "queueLength": 23,
+        "priority": "high"
+      }
+    ],
+    "completed": [
+      {
+        "id": "FL-FND-2024-18",
+        "name": "v2.2.0 验证",
+        "mergedPorts": ["洋山港", "盐田港", "宁波港"],
+        "dataset": "Roboflow Container Benchmark",
+        "metricsDelta": 0.12,
+        "evaluated": true
+      }
+    ]
+  }
+}

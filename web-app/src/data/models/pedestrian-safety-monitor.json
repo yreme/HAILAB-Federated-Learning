@@ -1,0 +1,243 @@
+{
+  "id": "pedestrian-safety-monitor",
+  "name": "抓放箱行人危险检测模型",
+  "category": "安全防护",
+  "description": "识别抓箱/放箱路径周边的行人、车辆与临时障碍，支持危险级别预警与回放。",
+  "thumbnail": "https://q7.itc.cn/q_70/images03/20250122/62c91eb514dc4ca89e2e0533c8397193.jpeg",
+  "tags": ["行人检测", "危险分级", "实时预警"],
+  "status": "stable",
+  "summary": {
+    "localVersion": "C7 v1.1.0",
+    "federatedVersion": "B7 v2.0.0",
+    "localMap": 0.8,
+    "federatedMap": 0.93,
+    "localPrecision": 0.83,
+    "federatedPrecision": 0.95,
+    "localRecall": 0.77,
+    "federatedRecall": 0.9,
+    "nodes": ["洋山港", "盐田港", "上海外高桥"],
+    "dataset": "港区行人车辆数据集 + Roboflow",
+    "health": "高优先级"
+  },
+  "overview": {
+    "datasetStats": [
+      { "value": "3", "description": "部署港口" },
+      { "value": "21,800", "description": "视频片段" },
+      { "value": "6", "description": "危险级别" },
+      { "value": "320ms", "description": "平均响应" }
+    ]
+  },
+  "performance": {
+    "metrics": [
+      { "label": "mAP@50", "localValue": 0.8, "fedValue": 0.93 },
+      { "label": "Precision", "localValue": 0.83, "fedValue": 0.95 },
+      { "label": "Recall", "localValue": 0.77, "fedValue": 0.9 }
+    ],
+    "lossSeries": [
+      {
+        "epoch": 1,
+        "localLoss": 0.86,
+        "fedLoss": 0.72,
+        "localMap": 0.44,
+        "fedMap": 0.58
+      },
+      {
+        "epoch": 2,
+        "localLoss": 0.8,
+        "fedLoss": 0.64,
+        "localMap": 0.5,
+        "fedMap": 0.63
+      },
+      {
+        "epoch": 3,
+        "localLoss": 0.74,
+        "fedLoss": 0.58,
+        "localMap": 0.55,
+        "fedMap": 0.68
+      },
+      {
+        "epoch": 4,
+        "localLoss": 0.68,
+        "fedLoss": 0.52,
+        "localMap": 0.61,
+        "fedMap": 0.74
+      },
+      {
+        "epoch": 5,
+        "localLoss": 0.62,
+        "fedLoss": 0.46,
+        "localMap": 0.66,
+        "fedMap": 0.79
+      },
+      {
+        "epoch": 6,
+        "localLoss": 0.56,
+        "fedLoss": 0.4,
+        "localMap": 0.71,
+        "fedMap": 0.83
+      },
+      {
+        "epoch": 7,
+        "localLoss": 0.5,
+        "fedLoss": 0.34,
+        "localMap": 0.75,
+        "fedMap": 0.87
+      },
+      {
+        "epoch": 8,
+        "localLoss": 0.46,
+        "fedLoss": 0.3,
+        "localMap": 0.78,
+        "fedMap": 0.9
+      },
+      {
+        "epoch": 9,
+        "localLoss": 0.42,
+        "fedLoss": 0.27,
+        "localMap": 0.8,
+        "fedMap": 0.92
+      },
+      {
+        "epoch": 10,
+        "localLoss": 0.38,
+        "fedLoss": 0.24,
+        "localMap": 0.81,
+        "fedMap": 0.93
+      },
+      {
+        "epoch": 11,
+        "localLoss": 0.36,
+        "fedLoss": 0.22,
+        "localMap": 0.8,
+        "fedMap": 0.93
+      },
+      {
+        "epoch": 12,
+        "localLoss": 0.34,
+        "fedLoss": 0.21,
+        "localMap": 0.8,
+        "fedMap": 0.93
+      }
+    ],
+    "mapSeries": [
+      { "epoch": 1, "localMap": 0.44, "fedMap": 0.58 },
+      { "epoch": 2, "localMap": 0.5, "fedMap": 0.63 },
+      { "epoch": 3, "localMap": 0.55, "fedMap": 0.68 },
+      { "epoch": 4, "localMap": 0.61, "fedMap": 0.74 },
+      { "epoch": 5, "localMap": 0.66, "fedMap": 0.79 },
+      { "epoch": 6, "localMap": 0.71, "fedMap": 0.83 },
+      { "epoch": 7, "localMap": 0.75, "fedMap": 0.87 },
+      { "epoch": 8, "localMap": 0.78, "fedMap": 0.9 },
+      { "epoch": 9, "localMap": 0.8, "fedMap": 0.92 },
+      { "epoch": 10, "localMap": 0.81, "fedMap": 0.93 },
+      { "epoch": 11, "localMap": 0.8, "fedMap": 0.93 },
+      { "epoch": 12, "localMap": 0.8, "fedMap": 0.93 }
+    ]
+  },
+  "versions": {
+    "local": [
+      {
+        "id": "pedestrian-local-v110",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C7 v1.1.0",
+        "createdAt": "2025-10-28 12:12",
+        "metrics": { "map50": 0.8, "precision": 0.83, "recall": 0.77 },
+        "sizeMB": 132.8,
+        "summary": "盐田港人行通道标注",
+        "badges": ["YOLOv8m", "单节点"],
+        "isActive": false
+      }
+    ],
+    "federated": [
+      {
+        "id": "pedestrian-fed-v200",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B7 v2.0.0",
+        "createdAt": "2025-12-08 20:00",
+        "metrics": { "map50": 0.93, "precision": 0.95, "recall": 0.9 },
+        "sizeMB": 134.4,
+        "summary": "三港 150 轮联训，新增危险分级",
+        "badges": ["联邦", "3节点", "危险分级"],
+        "isActive": true
+      },
+      {
+        "id": "pedestrian-fed-v190",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B7 v1.9.0",
+        "createdAt": "2025-11-12 09:20",
+        "metrics": { "map50": 0.91, "precision": 0.93, "recall": 0.88 },
+        "sizeMB": 133.7,
+        "summary": "引入外高桥数据",
+        "badges": ["联邦", "2节点"]
+      }
+    ]
+  },
+  "inference": {
+    "defaultModelVersion": "B7 v2.0.0",
+    "samples": [
+      {
+        "id": "pedestrian-sample-01",
+        "name": "行人闯入吊区",
+        "type": "video",
+        "thumbnail": "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=60",
+        "description": "自动触发红灯",
+        "detections": 15,
+        "confidence": 0.94,
+        "latency": 68
+      },
+      {
+        "id": "pedestrian-sample-02",
+        "name": "叉车与行人混行",
+        "type": "image",
+        "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=60",
+        "description": "堆场交叉口",
+        "detections": 18,
+        "confidence": 0.92,
+        "latency": 66
+      }
+    ]
+  },
+  "tasks": {
+    "running": [
+      {
+        "id": "FL-PED-2025-10",
+        "name": "危险等级自更新",
+        "currentRound": 64,
+        "totalRounds": 150,
+        "progress": 43,
+        "nodes": ["洋山港", "盐田港", "上海外高桥"],
+        "dataset": "行人危险 2025-Q4",
+        "logs": [
+          "[15:33:01] Round 64 -> global map 0.924",
+          "[15:33:03] 盐田港上传 2.1GB 视频",
+          "[15:33:04] 洋山港开启差分隐私噪声",
+          "[15:33:07] 危险等级阈值从 0.62 调至 0.58",
+          "[15:33:10] 计划下一轮加入热区采样"
+        ]
+      }
+    ],
+    "queued": [
+      {
+        "id": "FL-PED-2025-12",
+        "name": "夜班超分辨",
+        "position": 2,
+        "eta": "40 分钟",
+        "queueLength": 11,
+        "priority": "high"
+      }
+    ],
+    "completed": [
+      {
+        "id": "FL-PED-2024-19",
+        "name": "行人危险 v2.0",
+        "mergedPorts": ["洋山港", "盐田港", "上海外高桥"],
+        "dataset": "Pedestrian Risk Benchmark",
+        "metricsDelta": 0.13,
+        "evaluated": true
+      }
+    ]
+  }
+}

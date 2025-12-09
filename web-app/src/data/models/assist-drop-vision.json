@@ -1,0 +1,232 @@
+{
+  "id": "assist-drop-vision",
+  "name": "视觉辅助放箱模型",
+  "category": "视觉辅助",
+  "description": "辅助司机在放箱阶段判断地面车辆、人群及堆场空位，强调对齐和安全距离提示。",
+  "thumbnail": "https://img2.baidu.com/it/u=3851551551,1240321774&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500",
+  "tags": ["地面监控", "安全距离", "辅助驾驶"],
+  "status": "stable",
+  "summary": {
+    "localVersion": "C5 v0.9.0",
+    "federatedVersion": "B5 v1.3.0",
+    "localMap": 0.73,
+    "federatedMap": 0.88,
+    "localPrecision": 0.77,
+    "federatedPrecision": 0.9,
+    "localRecall": 0.69,
+    "federatedRecall": 0.85,
+    "nodes": ["宁波港", "厦门港"],
+    "dataset": "地面相机 + LiDAR 融合",
+    "health": "稳定"
+  },
+  "overview": {
+    "datasetStats": [
+      { "value": "2", "description": "参训节点" },
+      { "value": "7,400", "description": "地面样本" },
+      { "value": "5cm", "description": "对齐精度" },
+      { "value": "14%", "description": "时间节省" }
+    ]
+  },
+  "performance": {
+    "metrics": [
+      { "label": "mAP@50", "localValue": 0.73, "fedValue": 0.88 },
+      { "label": "Precision", "localValue": 0.77, "fedValue": 0.9 },
+      { "label": "Recall", "localValue": 0.69, "fedValue": 0.85 }
+    ],
+    "lossSeries": [
+      {
+        "epoch": 1,
+        "localLoss": 0.9,
+        "fedLoss": 0.76,
+        "localMap": 0.34,
+        "fedMap": 0.49
+      },
+      {
+        "epoch": 2,
+        "localLoss": 0.84,
+        "fedLoss": 0.68,
+        "localMap": 0.39,
+        "fedMap": 0.54
+      },
+      {
+        "epoch": 3,
+        "localLoss": 0.78,
+        "fedLoss": 0.62,
+        "localMap": 0.45,
+        "fedMap": 0.6
+      },
+      {
+        "epoch": 4,
+        "localLoss": 0.72,
+        "fedLoss": 0.56,
+        "localMap": 0.51,
+        "fedMap": 0.66
+      },
+      {
+        "epoch": 5,
+        "localLoss": 0.66,
+        "fedLoss": 0.5,
+        "localMap": 0.57,
+        "fedMap": 0.71
+      },
+      {
+        "epoch": 6,
+        "localLoss": 0.6,
+        "fedLoss": 0.44,
+        "localMap": 0.62,
+        "fedMap": 0.76
+      },
+      {
+        "epoch": 7,
+        "localLoss": 0.54,
+        "fedLoss": 0.38,
+        "localMap": 0.66,
+        "fedMap": 0.8
+      },
+      {
+        "epoch": 8,
+        "localLoss": 0.48,
+        "fedLoss": 0.33,
+        "localMap": 0.69,
+        "fedMap": 0.83
+      },
+      {
+        "epoch": 9,
+        "localLoss": 0.44,
+        "fedLoss": 0.3,
+        "localMap": 0.71,
+        "fedMap": 0.85
+      },
+      {
+        "epoch": 10,
+        "localLoss": 0.4,
+        "fedLoss": 0.27,
+        "localMap": 0.72,
+        "fedMap": 0.87
+      },
+      {
+        "epoch": 11,
+        "localLoss": 0.38,
+        "fedLoss": 0.25,
+        "localMap": 0.73,
+        "fedMap": 0.88
+      },
+      {
+        "epoch": 12,
+        "localLoss": 0.36,
+        "fedLoss": 0.24,
+        "localMap": 0.73,
+        "fedMap": 0.88
+      }
+    ],
+    "mapSeries": [
+      { "epoch": 1, "localMap": 0.34, "fedMap": 0.49 },
+      { "epoch": 2, "localMap": 0.39, "fedMap": 0.54 },
+      { "epoch": 3, "localMap": 0.45, "fedMap": 0.6 },
+      { "epoch": 4, "localMap": 0.51, "fedMap": 0.66 },
+      { "epoch": 5, "localMap": 0.57, "fedMap": 0.71 },
+      { "epoch": 6, "localMap": 0.62, "fedMap": 0.76 },
+      { "epoch": 7, "localMap": 0.66, "fedMap": 0.8 },
+      { "epoch": 8, "localMap": 0.69, "fedMap": 0.83 },
+      { "epoch": 9, "localMap": 0.71, "fedMap": 0.85 },
+      { "epoch": 10, "localMap": 0.72, "fedMap": 0.87 },
+      { "epoch": 11, "localMap": 0.73, "fedMap": 0.88 },
+      { "epoch": 12, "localMap": 0.73, "fedMap": 0.88 }
+    ]
+  },
+  "versions": {
+    "local": [
+      {
+        "id": "assist-drop-local-v090",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C5 v0.9.0",
+        "createdAt": "2025-09-08 16:00",
+        "metrics": { "map50": 0.73, "precision": 0.77, "recall": 0.69 },
+        "sizeMB": 112.3,
+        "summary": "宁波地面摄像头标注",
+        "badges": ["YOLOv8s", "地面视角"],
+        "isActive": false
+      }
+    ],
+    "federated": [
+      {
+        "id": "assist-drop-fed-v130",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B5 v1.3.0",
+        "createdAt": "2025-12-02 17:00",
+        "metrics": { "map50": 0.88, "precision": 0.9, "recall": 0.85 },
+        "sizeMB": 113.5,
+        "summary": "宁波+厦门 联训，加入 LiDAR 深度",
+        "badges": ["联邦", "2节点"],
+        "isActive": true
+      }
+    ]
+  },
+  "inference": {
+    "defaultModelVersion": "B5 v1.3.0",
+    "samples": [
+      {
+        "id": "assist-drop-sample-01",
+        "name": "地面车辆穿行",
+        "type": "video",
+        "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60",
+        "description": "叉车穿插",
+        "detections": 12,
+        "confidence": 0.9,
+        "latency": 49
+      },
+      {
+        "id": "assist-drop-sample-02",
+        "name": "空位检测",
+        "type": "image",
+        "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=60",
+        "description": "堆场空位",
+        "detections": 9,
+        "confidence": 0.88,
+        "latency": 47
+      }
+    ]
+  },
+  "tasks": {
+    "running": [
+      {
+        "id": "FL-ASD-2025-01",
+        "name": "地面安全距离鲁棒性",
+        "currentRound": 22,
+        "totalRounds": 70,
+        "progress": 31,
+        "nodes": ["宁波港", "厦门港"],
+        "dataset": "地面视角 2025-Q4",
+        "logs": [
+          "[13:12:08] Round 22 -> map 0.872",
+          "[13:12:09] 厦门港上传 420 张雾天样本",
+          "[13:12:11] 启用距离加权损失",
+          "[13:12:14] 宁波港延迟 80ms",
+          "[13:12:16] 正在生成新模型"
+        ]
+      }
+    ],
+    "queued": [
+      {
+        "id": "FL-ASD-2025-03",
+        "name": "放箱辅助-极寒模式",
+        "position": 6,
+        "eta": "3 小时",
+        "queueLength": 26,
+        "priority": "low"
+      }
+    ],
+    "completed": [
+      {
+        "id": "FL-ASD-2024-06",
+        "name": "辅助放箱 v1.3",
+        "mergedPorts": ["宁波港", "厦门港"],
+        "dataset": "Assist Drop Benchmark",
+        "metricsDelta": 0.13,
+        "evaluated": true
+      }
+    ]
+  }
+}

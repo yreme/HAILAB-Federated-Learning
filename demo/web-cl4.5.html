@@ -1,0 +1,1353 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>港口集装箱联邦学习平台</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            .gradient-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            }
+            .tab-active {
+                border-bottom: 3px solid #667eea;
+                color: #667eea;
+            }
+            .metric-card {
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            }
+            .pulse-dot {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.5;
+                }
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <!-- 导航栏 -->
+        <nav class="gradient-bg text-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-ship text-3xl"></i>
+                        <div>
+                            <h1 class="text-xl font-bold">
+                                港口集装箱联邦学习平台
+                            </h1>
+                            <p class="text-xs opacity-90">
+                                Container Vision AI - Federated Learning System
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <button
+                            class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition"
+                        >
+                            <i class="fas fa-bell mr-2"></i>通知
+                        </button>
+                        <button
+                            class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition"
+                        >
+                            <i class="fas fa-user-circle mr-2"></i>管理员
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要标签页 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="flex border-b">
+                    <button
+                        onclick="showTab('dashboard')"
+                        id="tab-dashboard"
+                        class="px-6 py-4 font-semibold tab-active"
+                    >
+                        <i class="fas fa-chart-line mr-2"></i>模型对比看板
+                    </button>
+                    <button
+                        onclick="showTab('federated')"
+                        id="tab-federated"
+                        class="px-6 py-4 font-semibold hover:text-purple-600 transition"
+                    >
+                        <i class="fas fa-network-wired mr-2"></i>联邦学习管理
+                    </button>
+                    <button
+                        onclick="showTab('models')"
+                        id="tab-models"
+                        class="px-6 py-4 font-semibold hover:text-purple-600 transition"
+                    >
+                        <i class="fas fa-code-branch mr-2"></i>模型版本控制
+                    </button>
+                    <button
+                        onclick="showTab('inference')"
+                        id="tab-inference"
+                        class="px-6 py-4 font-semibold hover:text-purple-600 transition"
+                    >
+                        <i class="fas fa-play-circle mr-2"></i>模型推理测试
+                    </button>
+                </div>
+            </div>
+
+            <!-- 模型对比看板 -->
+            <div id="content-dashboard" class="tab-content">
+                <!-- 性能指标对比 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700">
+                                mAP@50
+                            </h3>
+                            <i
+                                class="fas fa-bullseye text-2xl text-blue-500"
+                            ></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >本地模型 (C1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-gray-800"
+                                        >76.3%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-orange-500 h-2 rounded-full"
+                                        style="width: 76.3%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >联邦模型 (B1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-green-600"
+                                        >89.7%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-green-500 h-2 rounded-full"
+                                        style="width: 89.7%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="text-center pt-2 border-t">
+                                <span class="text-green-600 font-bold"
+                                    ><i class="fas fa-arrow-up"></i> +13.4%
+                                    提升</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700">
+                                Precision
+                            </h3>
+                            <i
+                                class="fas fa-crosshairs text-2xl text-purple-500"
+                            ></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >本地模型 (C1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-gray-800"
+                                        >81.2%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-orange-500 h-2 rounded-full"
+                                        style="width: 81.2%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >联邦模型 (B1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-green-600"
+                                        >92.5%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-green-500 h-2 rounded-full"
+                                        style="width: 92.5%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="text-center pt-2 border-t">
+                                <span class="text-green-600 font-bold"
+                                    ><i class="fas fa-arrow-up"></i> +11.3%
+                                    提升</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700">
+                                Recall
+                            </h3>
+                            <i
+                                class="fas fa-check-circle text-2xl text-green-500"
+                            ></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >本地模型 (C1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-gray-800"
+                                        >73.8%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-orange-500 h-2 rounded-full"
+                                        style="width: 73.8%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="flex justify-between items-center mb-1"
+                                >
+                                    <span class="text-sm text-gray-600"
+                                        >联邦模型 (B1)</span
+                                    >
+                                    <span
+                                        class="text-lg font-bold text-green-600"
+                                        >87.3%</span
+                                    >
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-green-500 h-2 rounded-full"
+                                        style="width: 87.3%"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="text-center pt-2 border-t">
+                                <span class="text-green-600 font-bold"
+                                    ><i class="fas fa-arrow-up"></i> +13.5%
+                                    提升</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 训练曲线对比 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-chart-area text-purple-600 mr-2"
+                            ></i>
+                            训练损失曲线对比
+                        </h3>
+                        <canvas id="lossChart" height="250"></canvas>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center"
+                        >
+                            <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                            mAP 提升曲线
+                        </h3>
+                        <canvas id="mapChart" height="250"></canvas>
+                    </div>
+                </div>
+
+                <!-- 数据集信息 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-database text-indigo-600 mr-2"></i>
+                        训练数据集概览
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="metric-card rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-gray-800">
+                                3
+                            </div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                参与港口节点
+                            </div>
+                        </div>
+                        <div class="metric-card rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-gray-800">
+                                15,240
+                            </div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                总训练图像
+                            </div>
+                        </div>
+                        <div class="metric-card rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-gray-800">
+                                6
+                            </div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                检测类别数
+                            </div>
+                        </div>
+                        <div class="metric-card rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-gray-800">
+                                45,680
+                            </div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                标注对象数
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 联邦学习管理 -->
+            <div id="content-federated" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- 创建训练任务 -->
+                    <div
+                        class="lg:col-span-2 bg-white rounded-lg shadow-md p-6"
+                    >
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-plus-circle text-green-600 mr-2"
+                            ></i>
+                            创建联邦学习任务
+                        </h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                    >任务名称</label
+                                >
+                                <input
+                                    type="text"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    placeholder="例如: 集装箱检测模型v2训练"
+                                />
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >基础模型</label
+                                    >
+                                    <select
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    >
+                                        <option>YOLOv8n - 本地模型v1</option>
+                                        <option>YOLOv8s - 联邦模型v1</option>
+                                        <option>从头开始训练</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >训练轮次</label
+                                    >
+                                    <input
+                                        type="number"
+                                        value="100"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                    >参与节点</label
+                                >
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            class="mr-2 w-4 h-4 text-purple-600"
+                                        />
+                                        <span class="text-sm"
+                                            >上海港 (5,840 images)</span
+                                        >
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            class="mr-2 w-4 h-4 text-purple-600"
+                                        />
+                                        <span class="text-sm"
+                                            >深圳港 (4,720 images)</span
+                                        >
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            class="mr-2 w-4 h-4 text-purple-600"
+                                        />
+                                        <span class="text-sm"
+                                            >宁波港 (4,680 images)</span
+                                        >
+                                    </label>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition"
+                            >
+                                <i class="fas fa-rocket mr-2"></i>启动联邦训练
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 快速统计 -->
+                    <div class="space-y-6">
+                        <div
+                            class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white"
+                        >
+                            <div class="flex items-center justify-between mb-2">
+                                <i class="fas fa-tasks text-3xl opacity-80"></i>
+                                <span class="text-sm opacity-90">总任务数</span>
+                            </div>
+                            <div class="text-4xl font-bold">12</div>
+                        </div>
+                        <div
+                            class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md p-6 text-white"
+                        >
+                            <div class="flex items-center justify-between mb-2">
+                                <i
+                                    class="fas fa-check-double text-3xl opacity-80"
+                                ></i>
+                                <span class="text-sm opacity-90">已完成</span>
+                            </div>
+                            <div class="text-4xl font-bold">8</div>
+                        </div>
+                        <div
+                            class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-md p-6 text-white"
+                        >
+                            <div class="flex items-center justify-between mb-2">
+                                <i
+                                    class="fas fa-spinner text-3xl opacity-80"
+                                ></i>
+                                <span class="text-sm opacity-90">进行中</span>
+                            </div>
+                            <div class="text-4xl font-bold">2</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 训练任务列表 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-list-ul text-blue-600 mr-2"></i>
+                        训练任务列表
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        任务ID
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        任务名称
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        参与节点
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        进度
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        状态
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm">
+                                        FL-2025-001
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-medium">
+                                        集装箱检测模型v2
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                                            >3个节点</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="flex-1 bg-gray-200 rounded-full h-2"
+                                            >
+                                                <div
+                                                    class="bg-blue-600 h-2 rounded-full"
+                                                    style="width: 68%"
+                                                ></div>
+                                            </div>
+                                            <span class="text-xs text-gray-600"
+                                                >68/100</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold"
+                                        >
+                                            <span
+                                                class="pulse-dot w-2 h-2 bg-orange-500 rounded-full mr-2"
+                                            ></span>
+                                            训练中
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button
+                                            class="text-blue-600 hover:text-blue-800 mr-3"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="text-red-600 hover:text-red-800"
+                                        >
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm">
+                                        FL-2025-002
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-medium">
+                                        吊机作业识别v1
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                                            >3个节点</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="flex-1 bg-gray-200 rounded-full h-2"
+                                            >
+                                                <div
+                                                    class="bg-blue-600 h-2 rounded-full"
+                                                    style="width: 35%"
+                                                ></div>
+                                            </div>
+                                            <span class="text-xs text-gray-600"
+                                                >35/100</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold"
+                                        >
+                                            <span
+                                                class="pulse-dot w-2 h-2 bg-orange-500 rounded-full mr-2"
+                                            ></span>
+                                            训练中
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button
+                                            class="text-blue-600 hover:text-blue-800 mr-3"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="text-red-600 hover:text-red-800"
+                                        >
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm">
+                                        FL-2024-156
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-medium">
+                                        集装箱检测模型v1
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                                            >3个节点</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="flex-1 bg-gray-200 rounded-full h-2"
+                                            >
+                                                <div
+                                                    class="bg-green-600 h-2 rounded-full"
+                                                    style="width: 100%"
+                                                ></div>
+                                            </div>
+                                            <span class="text-xs text-gray-600"
+                                                >100/100</span
+                                            >
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold"
+                                        >
+                                            <i
+                                                class="fas fa-check-circle mr-1"
+                                            ></i>
+                                            已完成
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button
+                                            class="text-blue-600 hover:text-blue-800 mr-3"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="text-green-600 hover:text-green-800"
+                                        >
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模型版本控制 -->
+            <div id="content-models" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold flex items-center">
+                            <i
+                                class="fas fa-code-branch text-purple-600 mr-2"
+                            ></i>
+                            模型版本管理
+                        </h3>
+                        <button
+                            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
+                        >
+                            <i class="fas fa-upload mr-2"></i>上传新模型
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- 模型版本项 -->
+                        <div
+                            class="border-l-4 border-green-500 bg-green-50 rounded-lg p-4"
+                        >
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div
+                                        class="flex items-center space-x-3 mb-2"
+                                    >
+                                        <span
+                                            class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold"
+                                            >当前版本</span
+                                        >
+                                        <h4
+                                            class="text-lg font-semibold text-gray-800"
+                                        >
+                                            联邦模型 B1 - v2.1.0
+                                        </h4>
+                                        <span class="text-xs text-gray-500"
+                                            >2025-12-08 14:30</span
+                                        >
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mt-3">
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >mAP@50</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-green-600"
+                                            >
+                                                89.7%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Precision</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-green-600"
+                                            >
+                                                92.5%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Recall</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-green-600"
+                                            >
+                                                87.3%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >模型大小</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                23.4 MB
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 flex items-center space-x-2"
+                                    >
+                                        <span
+                                            class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                                            >YOLOv8n</span
+                                        >
+                                        <span
+                                            class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded"
+                                            >3节点联邦训练</span
+                                        >
+                                        <span
+                                            class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded"
+                                            >100 epochs</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <button
+                                        class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
+                                    >
+                                        <i class="fas fa-check mr-2"></i>使用中
+                                    </button>
+                                    <button
+                                        class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
+                                    >
+                                        <i class="fas fa-download mr-2"></i>下载
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 历史版本 -->
+                        <div
+                            class="border-l-4 border-gray-300 bg-gray-50 rounded-lg p-4"
+                        >
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div
+                                        class="flex items-center space-x-3 mb-2"
+                                    >
+                                        <h4
+                                            class="text-lg font-semibold text-gray-700"
+                                        >
+                                            联邦模型 B1 - v2.0.0
+                                        </h4>
+                                        <span class="text-xs text-gray-500"
+                                            >2025-12-01 09:15</span
+                                        >
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mt-3">
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >mAP@50</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                87.2%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Precision</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                90.1%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Recall</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                84.8%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >模型大小</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                23.1 MB
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <button
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
+                                    >
+                                        <i class="fas fa-history mr-2"></i>回滚
+                                    </button>
+                                    <button
+                                        class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
+                                    >
+                                        <i class="fas fa-download mr-2"></i>下载
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="border-l-4 border-gray-300 bg-gray-50 rounded-lg p-4"
+                        >
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div
+                                        class="flex items-center space-x-3 mb-2"
+                                    >
+                                        <span
+                                            class="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold"
+                                            >本地模型</span
+                                        >
+                                        <h4
+                                            class="text-lg font-semibold text-gray-700"
+                                        >
+                                            本地模型 C1 - v1.0.0
+                                        </h4>
+                                        <span class="text-xs text-gray-500"
+                                            >2025-11-20 16:45</span
+                                        >
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mt-3">
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >mAP@50</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                76.3%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Precision</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                81.2%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >Recall</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                73.8%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs text-gray-600"
+                                                >模型大小</span
+                                            >
+                                            <div
+                                                class="text-lg font-bold text-gray-700"
+                                            >
+                                                22.8 MB
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 flex items-center space-x-2"
+                                    >
+                                        <span
+                                            class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                                            >YOLOv8n</span
+                                        >
+                                        <span
+                                            class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded"
+                                            >单节点训练</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <button
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
+                                    >
+                                        <i class="fas fa-redo mr-2"></i>启用
+                                    </button>
+                                    <button
+                                        class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
+                                    >
+                                        <i class="fas fa-download mr-2"></i>下载
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模型推理测试 -->
+            <div id="content-inference" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center"
+                        >
+                            <i class="fas fa-upload text-blue-600 mr-2"></i>
+                            上传测试图像
+                        </h3>
+                        <div
+                            class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-purple-500 transition cursor-pointer"
+                        >
+                            <i
+                                class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"
+                            ></i>
+                            <p class="text-gray-600 mb-2">
+                                点击或拖拽图像到此处
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                支持 JPG, PNG 格式
+                            </p>
+                        </div>
+
+                        <div class="mt-6">
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                                >选择模型版本</label
+                            >
+                            <select
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4"
+                            >
+                                <option>联邦模型 B1 - v2.1.0 (当前)</option>
+                                <option>联邦模型 B1 - v2.0.0</option>
+                                <option>本地模型 C1 - v1.0.0</option>
+                            </select>
+
+                            <button
+                                class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition"
+                            >
+                                <i class="fas fa-play mr-2"></i>开始检测
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center"
+                        >
+                            <i class="fas fa-image text-green-600 mr-2"></i>
+                            检测结果
+                        </h3>
+                        <div
+                            class="bg-gray-100 rounded-lg h-96 flex items-center justify-center mb-4"
+                        >
+                            <div class="text-center text-gray-500">
+                                <i class="fas fa-inbox text-5xl mb-3"></i>
+                                <p>暂无检测结果</p>
+                                <p class="text-sm mt-2">
+                                    上传图像并选择模型开始检测
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                <div class="text-2xl font-bold text-blue-600">
+                                    -
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1">
+                                    检测到的对象
+                                </div>
+                            </div>
+                            <div class="bg-green-50 rounded-lg p-3 text-center">
+                                <div class="text-2xl font-bold text-green-600">
+                                    -
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1">
+                                    平均置信度
+                                </div>
+                            </div>
+                            <div
+                                class="bg-purple-50 rounded-lg p-3 text-center"
+                            >
+                                <div class="text-2xl font-bold text-purple-600">
+                                    -
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1">
+                                    推理时间 (ms)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 历史检测记录 -->
+                <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-history text-indigo-600 mr-2"></i>
+                        历史检测记录
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        时间
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        图像名称
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        使用模型
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        检测数量
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        平均置信度
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                                    >
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm">
+                                        2025-12-08 14:25
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        container_test_01.jpg
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
+                                            >联邦 B1 v2.1.0</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-semibold">
+                                        12
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="text-green-600 font-semibold"
+                                            >94.3%</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button
+                                            class="text-blue-600 hover:text-blue-800 mr-3"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="text-green-600 hover:text-green-800"
+                                        >
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm">
+                                        2025-12-08 11:15
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        port_view_02.jpg
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs"
+                                            >本地 C1 v1.0.0</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3 text-sm font-semibold">
+                                        8
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span
+                                            class="text-orange-600 font-semibold"
+                                            >78.5%</span
+                                        >
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <button
+                                            class="text-blue-600 hover:text-blue-800 mr-3"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="text-green-600 hover:text-green-800"
+                                        >
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // 标签页切换
+            function showTab(tabName) {
+                // 隐藏所有内容
+                document.querySelectorAll(".tab-content").forEach((content) => {
+                    content.classList.add("hidden");
+                });
+
+                // 移除所有标签的激活状态
+                document.querySelectorAll('[id^="tab-"]').forEach((tab) => {
+                    tab.classList.remove("tab-active");
+                });
+
+                // 显示选中的内容
+                document
+                    .getElementById("content-" + tabName)
+                    .classList.remove("hidden");
+
+                // 激活选中的标签
+                document
+                    .getElementById("tab-" + tabName)
+                    .classList.add("tab-active");
+            }
+
+            // 训练损失曲线
+            const lossCtx = document
+                .getElementById("lossChart")
+                .getContext("2d");
+            new Chart(lossCtx, {
+                type: "line",
+                data: {
+                    labels: Array.from({ length: 100 }, (_, i) => i + 1),
+                    datasets: [
+                        {
+                            label: "本地模型 C1",
+                            data: Array.from(
+                                { length: 100 },
+                                (_, i) =>
+                                    0.8 * Math.exp(-i / 30) +
+                                    0.12 +
+                                    Math.random() * 0.05,
+                            ),
+                            borderColor: "rgb(251, 146, 60)",
+                            backgroundColor: "rgba(251, 146, 60, 0.1)",
+                            tension: 0.4,
+                        },
+                        {
+                            label: "联邦模型 B1",
+                            data: Array.from(
+                                { length: 100 },
+                                (_, i) =>
+                                    0.8 * Math.exp(-i / 25) +
+                                    0.05 +
+                                    Math.random() * 0.03,
+                            ),
+                            borderColor: "rgb(34, 197, 94)",
+                            backgroundColor: "rgba(34, 197, 94, 0.1)",
+                            tension: 0.4,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        },
+                        title: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Loss",
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Epoch",
+                            },
+                        },
+                    },
+                },
+            });
+
+            // mAP曲线
+            const mapCtx = document.getElementById("mapChart").getContext("2d");
+            new Chart(mapCtx, {
+                type: "line",
+                data: {
+                    labels: Array.from({ length: 100 }, (_, i) => i + 1),
+                    datasets: [
+                        {
+                            label: "本地模型 C1",
+                            data: Array.from({ length: 100 }, (_, i) =>
+                                Math.min(
+                                    0.763,
+                                    0.3 + i * 0.005 + Math.random() * 0.02,
+                                ),
+                            ),
+                            borderColor: "rgb(251, 146, 60)",
+                            backgroundColor: "rgba(251, 146, 60, 0.1)",
+                            tension: 0.4,
+                        },
+                        {
+                            label: "联邦模型 B1",
+                            data: Array.from({ length: 100 }, (_, i) =>
+                                Math.min(
+                                    0.897,
+                                    0.4 + i * 0.005 + Math.random() * 0.02,
+                                ),
+                            ),
+                            borderColor: "rgb(34, 197, 94)",
+                            backgroundColor: "rgba(34, 197, 94, 0.1)",
+                            tension: 0.4,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        },
+                        title: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: "mAP@50",
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Epoch",
+                            },
+                        },
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

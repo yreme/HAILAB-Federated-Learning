@@ -1,0 +1,232 @@
+{
+  "id": "assist-grab-vision",
+  "name": "视觉辅助抓箱模型",
+  "category": "视觉辅助",
+  "description": "为司机提供抓箱视角增强、角度校准与危险区域提醒的视觉模型。",
+  "thumbnail": "https://img0.baidu.com/it/u=3108648647,2339697194&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500",
+  "tags": ["辅助驾驶", "角度校准", "危险区域"],
+  "status": "stable",
+  "summary": {
+    "localVersion": "C4 v0.8.0",
+    "federatedVersion": "B4 v1.5.1",
+    "localMap": 0.76,
+    "federatedMap": 0.9,
+    "localPrecision": 0.8,
+    "federatedPrecision": 0.92,
+    "localRecall": 0.73,
+    "federatedRecall": 0.87,
+    "nodes": ["盐田港", "北部湾港", "厦门港"],
+    "dataset": "司机视角摄像头 + Roboflow 辅助数据",
+    "health": "稳定"
+  },
+  "overview": {
+    "datasetStats": [
+      { "value": "3", "description": "辅助节点" },
+      { "value": "12,500", "description": "司机视角视频帧" },
+      { "value": "8", "description": "危险区域类别" },
+      { "value": "19%", "description": "驾驶员负担降低" }
+    ]
+  },
+  "performance": {
+    "metrics": [
+      { "label": "mAP@50", "localValue": 0.76, "fedValue": 0.9 },
+      { "label": "Precision", "localValue": 0.8, "fedValue": 0.92 },
+      { "label": "Recall", "localValue": 0.73, "fedValue": 0.87 }
+    ],
+    "lossSeries": [
+      {
+        "epoch": 1,
+        "localLoss": 0.88,
+        "fedLoss": 0.74,
+        "localMap": 0.4,
+        "fedMap": 0.53
+      },
+      {
+        "epoch": 2,
+        "localLoss": 0.82,
+        "fedLoss": 0.66,
+        "localMap": 0.45,
+        "fedMap": 0.58
+      },
+      {
+        "epoch": 3,
+        "localLoss": 0.76,
+        "fedLoss": 0.6,
+        "localMap": 0.5,
+        "fedMap": 0.63
+      },
+      {
+        "epoch": 4,
+        "localLoss": 0.7,
+        "fedLoss": 0.54,
+        "localMap": 0.56,
+        "fedMap": 0.69
+      },
+      {
+        "epoch": 5,
+        "localLoss": 0.64,
+        "fedLoss": 0.48,
+        "localMap": 0.61,
+        "fedMap": 0.74
+      },
+      {
+        "epoch": 6,
+        "localLoss": 0.58,
+        "fedLoss": 0.42,
+        "localMap": 0.66,
+        "fedMap": 0.78
+      },
+      {
+        "epoch": 7,
+        "localLoss": 0.52,
+        "fedLoss": 0.36,
+        "localMap": 0.7,
+        "fedMap": 0.82
+      },
+      {
+        "epoch": 8,
+        "localLoss": 0.48,
+        "fedLoss": 0.32,
+        "localMap": 0.73,
+        "fedMap": 0.85
+      },
+      {
+        "epoch": 9,
+        "localLoss": 0.44,
+        "fedLoss": 0.28,
+        "localMap": 0.75,
+        "fedMap": 0.87
+      },
+      {
+        "epoch": 10,
+        "localLoss": 0.4,
+        "fedLoss": 0.25,
+        "localMap": 0.76,
+        "fedMap": 0.89
+      },
+      {
+        "epoch": 11,
+        "localLoss": 0.38,
+        "fedLoss": 0.23,
+        "localMap": 0.76,
+        "fedMap": 0.9
+      },
+      {
+        "epoch": 12,
+        "localLoss": 0.36,
+        "fedLoss": 0.22,
+        "localMap": 0.76,
+        "fedMap": 0.9
+      }
+    ],
+    "mapSeries": [
+      { "epoch": 1, "localMap": 0.4, "fedMap": 0.53 },
+      { "epoch": 2, "localMap": 0.45, "fedMap": 0.58 },
+      { "epoch": 3, "localMap": 0.5, "fedMap": 0.63 },
+      { "epoch": 4, "localMap": 0.56, "fedMap": 0.69 },
+      { "epoch": 5, "localMap": 0.61, "fedMap": 0.74 },
+      { "epoch": 6, "localMap": 0.66, "fedMap": 0.78 },
+      { "epoch": 7, "localMap": 0.7, "fedMap": 0.82 },
+      { "epoch": 8, "localMap": 0.73, "fedMap": 0.85 },
+      { "epoch": 9, "localMap": 0.75, "fedMap": 0.87 },
+      { "epoch": 10, "localMap": 0.76, "fedMap": 0.89 },
+      { "epoch": 11, "localMap": 0.76, "fedMap": 0.9 },
+      { "epoch": 12, "localMap": 0.76, "fedMap": 0.9 }
+    ]
+  },
+  "versions": {
+    "local": [
+      {
+        "id": "assist-grab-local-v080",
+        "label": "本地模型",
+        "tag": "local",
+        "version": "C4 v0.8.0",
+        "createdAt": "2025-09-15 10:15",
+        "metrics": { "map50": 0.76, "precision": 0.8, "recall": 0.73 },
+        "sizeMB": 118.2,
+        "summary": "盐田港夜视增强",
+        "badges": ["夜视", "单节点"],
+        "isActive": false
+      }
+    ],
+    "federated": [
+      {
+        "id": "assist-grab-fed-v151",
+        "label": "联邦模型",
+        "tag": "federated",
+        "version": "B4 v1.5.1",
+        "createdAt": "2025-12-06 13:55",
+        "metrics": { "map50": 0.9, "precision": 0.92, "recall": 0.87 },
+        "sizeMB": 119.6,
+        "summary": "多港口驾驶视角融合",
+        "badges": ["联邦", "3节点"],
+        "isActive": true
+      }
+    ]
+  },
+  "inference": {
+    "defaultModelVersion": "B4 v1.5.1",
+    "samples": [
+      {
+        "id": "assist-grab-sample-01",
+        "name": "雨天抓箱视角",
+        "type": "image",
+        "thumbnail": "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=60",
+        "description": "挡风玻璃雨水",
+        "detections": 11,
+        "confidence": 0.91,
+        "latency": 52
+      },
+      {
+        "id": "assist-grab-sample-02",
+        "name": "吊臂盲区提醒",
+        "type": "video",
+        "thumbnail": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=600&q=60",
+        "description": "堆高 8 层",
+        "detections": 7,
+        "confidence": 0.88,
+        "latency": 58
+      }
+    ]
+  },
+  "tasks": {
+    "running": [
+      {
+        "id": "FL-ASG-2025-02",
+        "name": "抓箱辅助夜视增强",
+        "currentRound": 34,
+        "totalRounds": 90,
+        "progress": 38,
+        "nodes": ["盐田港", "北部湾港", "厦门港"],
+        "dataset": "司机视角 2025-夜",
+        "logs": [
+          "[12:05:01] Round 34 -> global map 0.872",
+          "[12:05:03] 北部湾上传 1.3GB 夜视帧",
+          "[12:05:04] 自适应权重：盐田 0.38",
+          "[12:05:06] 节点厦门延迟 220ms，重传成功",
+          "[12:05:10] 注入多尺度注意力"
+        ]
+      }
+    ],
+    "queued": [
+      {
+        "id": "FL-ASG-2025-03",
+        "name": "抓箱辅助-雾天模式",
+        "position": 4,
+        "eta": "2 小时",
+        "queueLength": 18,
+        "priority": "low"
+      }
+    ],
+    "completed": [
+      {
+        "id": "FL-ASG-2024-09",
+        "name": "辅助抓箱 v1.5",
+        "mergedPorts": ["盐田港", "北部湾港"],
+        "dataset": "Assist Vision Benchmark",
+        "metricsDelta": 0.12,
+        "evaluated": true
+      }
+    ]
+  }
+}
